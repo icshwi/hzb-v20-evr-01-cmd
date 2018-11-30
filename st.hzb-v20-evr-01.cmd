@@ -16,7 +16,7 @@ epicsEnvSet("NCG_SYS", "HZB-V20:")
 epicsEnvSet("NCG_DRV", "Chop-Drv-01tmp:")
 ##################################################
 
-< "$(EPICS_CMDS)/mrfioc2-common/st.evr.cmd"
+< "$(EPICS_CMDS)/mrfioc2-common-cmd/st.evr.cmd"
 
 # Set delay compensation target. This is required even when delay compensation
 # is disabled to avoid occasionally corrupting timestamps.
