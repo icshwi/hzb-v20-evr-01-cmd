@@ -1,3 +1,5 @@
+require evr-timestamp-buffer,2.5.0
+
 epicsEnvSet("SYS", "HZB-V20:TS")
 epicsEnvSet("PCI_SLOT", "01:00.0")
 epicsEnvSet("DEVICE", "EVR-01")
@@ -17,6 +19,15 @@ epicsEnvSet("NCG_DRV", "Chop-Drv-01tmp:")
 ##################################################
 
 < "$(EPICS_CMDS)/mrfioc2-common-cmd/st.evr.cmd"
+
+# Load EVR database
+dbLoadRecords("evr-pcie-300dc-ess.db","EVR=$(EVR),SYS=$(SYS),D=$(DEVICE),FEVT=88.0525,PINITSEQ=0")
+
+# Load timestamp buffer database
+iocshLoad("$(evr-timestamp-buffer_DIR)/evr-timestamp-buffer.iocsh", "CHIC_SYS=$(CHIC_SYS), CHIC_DEV=$(CHIC_DEV), CHOP_DRV=$(CHOP_DRV), SYS=$(SYS)")
+
+# From mrfioc2-common-cmd/st.evr.cmd - not sure if these macros are correct
+#iocshLoad("$(evr-timestamp-buffer_DIR)/evr-timestamp-buffer.iocsh", "CHIC_SYS=$(CHIC_SYS), CHOP_DRV=$(CHOP_DRV), SYS=$(SYS), DEVICE=$(CHIC_DEV):")
 
 iocInit()
 
