@@ -21,7 +21,7 @@ epicsEnvSet("NCG_DRV", "Chop-Drv-01tmp:")
 < "$(EPICS_CMDS)/mrfioc2-common-cmd/st.evr.cmd"
 
 # Load EVR database
-dbLoadRecords("evr-pcie-300dc-ess.db","EVR=$(EVR),SYS=$(SYS),D=$(DEVICE),FEVT=88.0525,PINITSEQ=0")
+dbLoadRecords("$(MRF_HW_DB)","EVR=$(EVR),SYS=$(SYS),D=$(DEVICE),FEVT=88.0525,PINITSEQ=0")
 
 # Load timestamp buffer database
 iocshLoad("$(evr-timestamp-buffer_DIR)/evr-timestamp-buffer.iocsh", "CHIC_SYS=$(CHIC_SYS), CHIC_DEV=$(CHIC_DEV), CHOP_DRV=$(CHOP_DRV), SYS=$(SYS)")
