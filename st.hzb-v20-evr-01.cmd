@@ -1,5 +1,5 @@
 epicsEnvSet("SYS", "HZB-V20:TS")
-epicsEnvSet("PCI_SLOT", "1:0.0")
+epicsEnvSet("PCI_SLOT", "01:00.0")
 epicsEnvSet("DEVICE", "EVR-01")
 epicsEnvSet("EVR", "$(DEVICE)")
 epicsEnvSet("CHIC_SYS", "HZB-V20:")
@@ -18,11 +18,18 @@ epicsEnvSet("NCG_DRV", "Chop-Drv-01tmp:")
 
 < "$(EPICS_CMDS)/mrfioc2-common-cmd/st.evr.cmd"
 
+iocInit()
+
+# Global default values
+# Set the frequency that the EVR expects from the EVG for the event clock
+dbpf $(SYS)-$(DEVICE):Time-Clock-SP 88.0525
+
 # Set delay compensation target. This is required even when delay compensation
 # is disabled to avoid occasionally corrupting timestamps.
 #dbpf $(SYS)-$(DEVICE):DC-Tgt-SP 70
 dbpf $(SYS)-$(DEVICE):DC-Tgt-SP 100
 
+dbpf $(SYS)-$(DEVICE):Ena-Sel 1
 ######### INPUTS #########
 
 # Set up of UnivIO 0 as Input. Generate Code 10 locally on rising edge.
