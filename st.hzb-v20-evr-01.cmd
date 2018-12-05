@@ -59,25 +59,25 @@ dbpf $(SYS)-$(DEVICE):EvtB-SP.OUT "@OBJ=$(EVR),Code=11"
 dbpf $(SYS)-$(DEVICE):EvtB-SP.VAL 11
 
 ######### OUTPUTS #########
-dbpf $(SYS)-$(DEVICE):DlyGen1-Evt-Trig0-SP 14
-dbpf $(SYS)-$(DEVICE):DlyGen1-Width-SP 2860 #1ms
-dbpf $(SYS)-$(DEVICE):DlyGen1-Delay-SP 0 #0ms
-dbpf $(SYS)-$(DEVICE):OutFPUV03-Src-SP 1 #Connect output2 to DlyGen-1
-
-#Set up delay generator 2 to trigger on event 16
-dbpf $(SYS)-$(DEVICE):DlyGen2-Width-SP 1000 #1ms
-dbpf $(SYS)-$(DEVICE):DlyGen2-Delay-SP 0 #0ms
-dbpf $(SYS)-$(DEVICE):DlyGen2-Evt-Trig0-SP 16
-
-#Set up delay generator 0 to trigger on event 17 and set universal I/O 2
+#Set up delay generator 0 to trigger on event 1 and set universal I/O 2
 dbpf $(SYS)-$(DEVICE):DlyGen0-Width-SP 1000 #1ms
 dbpf $(SYS)-$(DEVICE):DlyGen0-Delay-SP 0 #0ms
-dbpf $(SYS)-$(DEVICE):DlyGen0-Evt-Trig0-SP 17
-dbpf $(SYS)-$(DEVICE):OutFPUV02-Src-SP 0 #Connect to DlyGen-0
+dbpf $(SYS)-$(DEVICE):DlyGen0-Evt-Trig0-SP 14
+
+dbpf $(SYS)-$(DEVICE):DlyGen1-Width-SP 5000 #5ms, 2860 us in ess pulse
+dbpf $(SYS)-$(DEVICE):DlyGen1-Delay-SP 0 #0ms
+dbpf $(SYS)-$(DEVICE):DlyGen1-Evt-Trig0-SP 15
+dbpf $(SYS)-$(DEVICE):OutFPUV02-Src-SP 1 #Connect output2 to DlyGen-1
+
+#Set up delay generator 2 to trigger on event 16
+dbpf $(SYS)-$(DEVICE):DlyGen2-Width-SP 5000 #5ms
+dbpf $(SYS)-$(DEVICE):DlyGen2-Delay-SP 0 #0ms
+dbpf $(SYS)-$(DEVICE):DlyGen2-Evt-Trig0-SP 16
+dbpf $(SYS)-$(DEVICE):OutFPUV03-Src-SP 2 #Connect output2 to DlyGen-1
 
 ######## Sequencer #########
 # Select trigger source for soft seq 0, trigger source 0, 2 means pulser 2
-dbpf $(SYS)-$(DEVICE):SoftSeq0-TrigSrc-0-Sel 2
+dbpf $(SYS)-$(DEVICE):SoftSeq0-TrigSrc-0-Sel 0
 
 # Load sequencer setup
 dbpf $(SYS)-$(DEVICE):SoftSeq0-Load-Cmd 1
@@ -85,17 +85,16 @@ dbpf $(SYS)-$(DEVICE):SoftSeq0-Load-Cmd 1
 # Enable sequencer
 dbpf $(SYS)-$(DEVICE):SoftSeq0-Enable-Cmd 1
 
-dbpf $(CHIC_SYS)$(CHOP_DRV)01:Freq-SP 28
-dbpf $(CHIC_SYS)$(CHOP_DRV)02:Freq-SP 28
-dbpf $(CHIC_SYS)$(CHOP_DRV)03:Tube-Pos-Delay 10
-dbpf $(CHIC_SYS)$(CHOP_DRV)04:Tube-Pos-Delay 20
+#dbpf $(CHIC_SYS)$(CHOP_DRV)01:Freq-SP 14
+#dbpf $(CHIC_SYS)$(CHOP_DRV)02:Freq-SP 42
 # Check that this command is required.
-dbpf $(SYS)-$(DEVICE):RF-Freq 88052500
+#dbpf $(SYS)-$(DEVICE):RF-Freq 88052500
 
 # Hints for setting input PVs from client
-#caput -a $(SYS)-$(DEVICE):SoftSeq0-EvtCode-SP 2 17 18
-#caput -a $(SYS)-$(DEVICE):SoftSeq0-Timestamp-SP 2 0 12578845
+#caput -a $(SYS)-$(DEVICE):SoftSeq0-EvtCode-SP 5 15 16 16 16 127
+#caput -a $(SYS)-$(DEVICE):SoftSeq0-Timestamp-SP 5 0 1 2096489 4192977 6289460 # 6289464
 #caput -n $(SYS)-$(DEVICE):SoftSeq0-Commit-Cmd 1
+system "/bin/bash /epics/iocs/cmds/hzb-v20-evr-01-cmd/conf_evr_seq.sh"
 
 ######### TIME STAMP #########
 
