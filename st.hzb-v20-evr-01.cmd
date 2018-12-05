@@ -26,6 +26,8 @@ dbLoadRecords("$(MRF_HW_DB)","EVR=$(EVR),SYS=$(SYS),D=$(DEVICE),FEVT=88.0525,PIN
 # Load timestamp buffer database
 iocshLoad("$(evr-timestamp-buffer_DIR)/evr-timestamp-buffer.iocsh", "CHIC_SYS=$(CHIC_SYS), CHIC_DEV=$(CHIC_DEV), CHOP_DRV=$(CHOP_DRV), SYS=$(SYS)")
 
+dbLoadRecords("/epics/iocs/cmds/hzb-v20-evr-01-cmd/evr1alias.db")
+
 iocInit()
 
 # Global default values
@@ -76,14 +78,26 @@ dbpf $(SYS)-$(DEVICE):DlyGen2-Evt-Trig0-SP 16
 dbpf $(SYS)-$(DEVICE):OutFPUV03-Src-SP 2 #Connect output2 to DlyGen-1
 
 ######## Sequencer #########
-# Select trigger source for soft seq 0, trigger source 0, 2 means pulser 2
-dbpf $(SYS)-$(DEVICE):SoftSeq0-TrigSrc-0-Sel 0
-
 # Load sequencer setup
 dbpf $(SYS)-$(DEVICE):SoftSeq0-Load-Cmd 1
 
 # Enable sequencer
 dbpf $(SYS)-$(DEVICE):SoftSeq0-Enable-Cmd 1
+
+# Load sequence events and corresponding tick lists
+system "/bin/bash /epics/iocs/cmds/hzb-v20-evr-01-cmd/conf_evr_seq.sh"
+
+# Select trigger source for soft seq 0, trigger source 0, 2 means delay gen  2, 0 means delay gen 0
+dbpf $(SYS)-$(DEVICE):SoftSeq0-TrigSrc-0-Sel 0
+
+# Normal means continuous, Single means once per Enable-Cmd
+dbpf $(SYS)-$(DEVICE):SoftSeq0-RunMode-Sel "Normal"
+
+# Use ticks or microseconds
+dbpf $(SYS)-$(DEVICE):SoftSeq0-TsResolution-Sel "Ticks"
+
+# Commit all the settings for the sequnce
+dbpf $(SYS)-$(DEVICE):SoftSeq0-Commit-Cmd "1"
 
 #dbpf $(CHIC_SYS)$(CHOP_DRV)01:Freq-SP 14
 #dbpf $(CHIC_SYS)$(CHOP_DRV)02:Freq-SP 42
@@ -94,7 +108,7 @@ dbpf $(SYS)-$(DEVICE):SoftSeq0-Enable-Cmd 1
 #caput -a $(SYS)-$(DEVICE):SoftSeq0-EvtCode-SP 5 15 16 16 16 127
 #caput -a $(SYS)-$(DEVICE):SoftSeq0-Timestamp-SP 5 0 1 2096489 4192977 6289460 # 6289464
 #caput -n $(SYS)-$(DEVICE):SoftSeq0-Commit-Cmd 1
-system "/bin/bash /epics/iocs/cmds/hzb-v20-evr-01-cmd/conf_evr_seq.sh"
+
 
 ######### TIME STAMP #########
 
