@@ -1,0 +1,5 @@
+VAR_DIR="/var"
+PROCSERV="/usr/bin/procServ"
+PROCSERV_PORT=2006
+IOC_CMD_DIR=/epics/iocs/cmds
+IOC_NAME=hzb-v20-evr-01
