@@ -1,15 +1,17 @@
-require evr-timestamp-buffer,2.5.0
+require evr_timestamp_buffer,2.6.0
 
 epicsEnvSet("SYS", "HZB-V20:TS")
 epicsEnvSet("PCI_SLOT", "01:00.0")
 epicsEnvSet("DEVICE", "EVR-01")
 epicsEnvSet("EVR", "$(DEVICE)")
 epicsEnvSet("CHIC_SYS", "HZB-V20:")
-epicsEnvSet("CHOP_DRV", "Chop-Drv-01tmp")
+epicsEnvSet("CHOP_DRV", "Chop-Drv-01")
 epicsEnvSet("CHIC_DEV", "TS-$(DEVICE)")
 epicsEnvSet("MRF_HW_DB", "evr-pcie-300dc-ess.db")
 #epicsEnvSet("E3_MODULES", "/epics/iocs/e3")
 epicsEnvSet("EPICS_CMDS", "/epics/iocs/cmds")
+
+epicsEnvSet("BUFFSIZE", "100")
 
 ######## Temporary until chopper group ###########
 ######## changes PV names              ###########
@@ -24,8 +26,9 @@ epicsEnvSet("NCG_DRV", "Chop-Drv-01tmp:")
 dbLoadRecords("$(MRF_HW_DB)","EVR=$(EVR),SYS=$(SYS),D=$(DEVICE),FEVT=88.0525,PINITSEQ=0")
 
 # Load timestamp buffer database
-iocshLoad("$(evr-timestamp-buffer_DIR)/evr-timestamp-buffer.iocsh", "CHIC_SYS=$(CHIC_SYS), CHIC_DEV=$(CHIC_DEV), CHOP_DRV=$(CHOP_DRV), SYS=$(SYS)")
+# iocshLoad("$(evr-timestamp-buffer_DIR)/evr-timestamp-buffer.iocsh", "CHIC_SYS=$(CHIC_SYS), CHIC_DEV=$(CHIC_DEV), CHOP_DRV=$(CHOP_DRV), SYS=$(SYS)")
 
+iocshLoad("$(evr_timestamp_buffer_DIR)/evr_timestamp_buffer.iocsh", "CHIC_SYS=$(CHIC_SYS), CHIC_DEV=$(CHIC_DEV), CHOP_DRV=$(CHOP_DRV), SYS=$(SYS), BUFFSIZE=$(BUFFSIZE)")
 dbLoadRecords("/epics/iocs/cmds/hzb-v20-evr-01-cmd/evr1alias.db")
 
 iocInit()
